@@ -1,0 +1,69 @@
+<h1 id="tableLabel">Sanctioned Entities</h1>
+
+<p *ngIf="!entities"><em>Loading...</em></p>
+
+<div class="row">
+    <div class="col-md-6">
+        <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="entities">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Domicile</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let entity of entities">
+                    <td>{{ entity.name }}</td>
+                    <td>{{ entity.domicile }}</td>
+                    <td *ngIf="entity.accepted" class="text-success">Accepted</td>
+                    <td *ngIf="!entity.accepted" class="text-danger">Rejected</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+
+        <div class="container">
+            <div class="card shadow rounded">
+                <div class="card-header card-title" style="text-align:center;">
+                    <strong>Add New Sanctioned Entity</strong>
+                </div>
+                <div class="card card-body">
+                    <form [formGroup]="newSanctionedEntityFrm" (submit)="submit()" autocomplete="off">
+                        <div class="alert alert-danger" *ngIf="isDuplicate">
+                            Duplicate entity with the same name and domicile, please amend and add.
+                        </div>
+                        <div class="form-group">
+                            <label class="formlabel">Name</label>
+                            <input id="name" formControlName="name" type="text" class="form-control"
+                                [ngClass]="newSanctionedEntityFrm.controls['name'].invalid ? 'is-invalid' : 'is-valid'"
+                                autocomplete="off" autofocus>
+                        </div>
+                        <div class="form-group">
+                            <label class="formlabel">Domicile</label>
+                            <input id="domicile" formControlName="domicile" type="text" class="form-control"
+                                [ngClass]="newSanctionedEntityFrm.controls['domicile'].invalid ? 'is-invalid' : 'is-valid'"
+                                autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" formControlName="accepted" class="custom-control-input"
+                                    id="accepted" [ngClass]="(currentStatus)?'is-valid':'is-invalid'"
+                                    (change)="showStatus($event)">
+                                <label class="custom-control-label" for="accepted">Status :
+                                    {{currentStatusText}}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button [disabled]="newSanctionedEntityFrm.invalid" type="submit"
+                                class="btn btn-primary btn-block font-weight-bold">
+                                Add
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
