@@ -1,20 +1,25 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, observable, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { DataService } from '../../services/data.service';
 
 @Component({
-  selector: 'app-jumbotron-counter',
-  templateUrl: './jumbotron-counter.component.html'
+  selector: 'app-counter-component',
+  templateUrl: './counter.component.html'
 })
-export class JumbotronCounterComponent implements OnInit {
-  public currentCount: number;
+export class CounterComponent implements OnInit, OnDestroy {
+  public currentCount: number = 0;
   private subs = new Subscription();
   constructor(private dataService: DataService) { }
 
   ngOnInit() {
     this.displayCounter();
   }
-  
+
+  public incrementCounter() {
+    this.currentCount++;
+    this.dataService.updateCounter(this.currentCount);
+  }
+
   displayCounter() {
     this.subs.add(
       this.dataService.getCounter().subscribe(c => this.currentCount = c))
@@ -23,5 +28,4 @@ export class JumbotronCounterComponent implements OnInit {
   ngOnDestroy() {
     this.subs.unsubscribe();
   }
-
 }
